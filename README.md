@@ -5,8 +5,6 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
 
-# 🏨 Restful-Booker API Automation & Testing Suite
-
 This repository contains a comprehensive API Test Automation and Manual Testing suite built for the **Restful-Booker** API. The project demonstrates end-to-end API testing workflows, including test collections, environment configurations, automated execution via **Newman**, and detailed HTML reporting.
 
 ---
