@@ -1,0 +1,374 @@
+{
+  "info": {
+    "_postman_id": "b4dab5c4-447d-4012-80db-6606d055e612",
+    "name": "Booking_Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "31675533"
+  },
+  "item": [
+    {
+      "name": "Create Booking",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Set Valiables in Environment\nvar response = pm.response.json(); \npm.environment.set(\"bookingid\",response.bookingid);  \npm.environment.set(\"firstname\",response.booking.firstname);\npm.environment.set(\"lastname\",response.booking.lastname);  \npm.environment.set(\"totalprice\",response.booking.totalprice);  \npm.environment.set(\"depositpaid\",response.booking.depositpaid);  \npm.environment.set(\"checkin\",response.booking.bookingdates.checkin);  \npm.environment.set(\"checkout\",response.booking.bookingdates.checkout); \npm.environment.set(\"additionalneeds\",response.booking.additionalneeds);  \n \n// Status Code Check\npm.test(\"Status code is 201 OK\", function () {\n    pm.response.to.have.status(201);\n});\n\n// Response Time Check (Within 3 seconds)\npm.test(\"Response time is under 3000ms\", function () {\n    pm.expect(pm.response.responseTime).to.be.below(3000);\n});\n\n// Response Size Check (Under 1500 bytes)\npm.test(\"Response size is under 900 bytes\", function () {\n    pm.expect(pm.response.responseSize).to.be.below(900);\n});\n\npm.test(\"Verify response data types\", function () {\n    const jsonData = pm.response.json();\n\n    pm.expect(jsonData.firstname).to.be.a(\"string\");\n    pm.expect(jsonData.totalprice).to.be.a(\"number\");\n    pm.expect(jsonData.depositpaid).to.be.a(\"boolean\");\n    pm.expect(jsonData.bookingdates).to.be.an(\"object\");\n});"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// var fName=pm.variables.replaceIn('{{$randomFirstName}}')\r\n// pm.environment.set(\"fName\",fName);\r\n\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\t\"firstname\" : \"Jim\",\r\n\t\"lastname\" : \"Brown\",\r\n\t\"totalprice\" : 111,\r\n\t\"depositpaid\" : true,\r\n\t\"bookingdates\" : {\r\n    \t\"checkin\" : \"2018-01-01\",\r\n    \t\"checkout\" : \"2019-01-01\"\r\n\t},\r\n\t\"additionalneeds\" : \"Breakfast\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/booking",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "booking"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Booking",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Status Code Check\r\npm.test(\"Status code is 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n// Response Time Check (Within 3 seconds)\r\npm.test(\"Response time is under 3000ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(3000);\r\n});\r\n\r\n// Response Size Check (Under 1500 bytes)\r\npm.test(\"Response size is under 900 bytes\", function () {\r\n    pm.expect(pm.response.responseSize).to.be.below(900);\r\n});\r\n\r\npm.test(\"Verify updated booking details\", function () {\r\n// pm.test(\"Verify firstname is Jim\", function () {\r\n    // const pm.response.json() = pm.response.json();\r\n    // pm.expect(pm.response.json().firstname).to.eql(\"Jim\");\r\n    pm.expect(pm.environment.get(\"firstname\")).to.eql(pm.response.json().firstname);\r\n// });\r\n\r\n// pm.test(\"Verify lastname is Brown\", function () {\r\n    // const jsonData= pm.response.json();\r\n    // pm.expect(pm.response.json().lastname).to.eql(\"Brown\");\r\n    pm.expect(pm.environment.get(\"lastname\")).to.eql(pm.response.json().lastname);\r\n// });\r\n\r\n// pm.test(\"Verify totalprice is 111\", function () {\r\n    // const jsonData = pm.response.json();\r\n    // pm.expect(pm.response.json().totalprice).to.eql(111);\r\n    pm.expect(pm.environment.get(\"totalprice\")).to.eql(pm.response.json().totalprice);\r\n// });\r\n\r\n// pm.test(\"Verify depositpaid is true\", function () {\r\n    // const jsonData = pm.response.json();\r\n    // pm.expect(pm.response.json().depositpaid).to.eql(true);\r\n    pm.expect(pm.environment.get(\"depositpaid\")).to.eql(pm.response.json().depositpaid);\r\n// });\r\n\r\n// pm.test(\"Verify checkin is 2018-01-01\", function () {\r\n    // const jsonData = pm.response.json();\r\n    // pm.expect(pm.response.json().bookingdates.checkin).to.eql(\"2018-01-01\");\r\n    pm.expect(pm.environment.get(\"checkin\")).to.eql(pm.response.json().bookingdates.checkin);\r\n// });\r\n\r\n// pm.test(\"Verify checkout is 2019-01-01\", function () {\r\n    // const jsonData = pm.response.json();\r\n    pm.expect(pm.environment.get(\"checkout\")).to.eql(pm.response.json().bookingdates.checkout);\r\n    // pm.expect(pm.response.json().bookingdates.checkout).to.eql(\"2019-01-01\");\r\n// });\r\n\r\n// pm.test(\"Verify additionalneeds is Breakfast\", function () {\r\n    // const jsonData = pm.response.json();\r\n    // pm.expect(pm.response.json().additionalneeds).to.eql(\"Breakfast\");\r\n    pm.expect(pm.environment.get(\"additionalneeds\")).to.eql(pm.response.json().additionalneeds);\r\n});\r\n \r\n\r\n\r\n// pm.test(\"Verify additionalneeds is Breakfast\", function () {\r\n//     pm.expect(pm.environment.get(\"additionalneeds\")).to.eql(pm.response.json().additionalneeds)\r\n// });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/booking/{{bookingid}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "booking",
+            "{{bookingid}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Status Code Check\r\npm.test(\"Status code is 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n// Response Time Check (Within 3 seconds)\r\npm.test(\"Response time is under 3000ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(3000);\r\n});\r\n\r\n// Response Size Check (Under 1500 bytes)\r\npm.test(\"Response size is under 900 bytes\", function () {\r\n    pm.expect(pm.response.responseSize).to.be.below(900);\r\n});\r\n\r\n// const jsonData = pm.response.json();\r\npm.environment.set(\"token\", pm.response.json().token);\r\n\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\t\"username\": \"admin\",\r\n\t\"password\": \"password123\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/auth",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "auth"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Booking",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Status Code Check\r\npm.test(\"Status code is 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n// Response Time Check (Within 3 seconds)\r\npm.test(\"Response time is under 3000ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(3000);\r\n});\r\n\r\n// Response Size Check (Under 1500 bytes)\r\npm.test(\"Response size is under 900 bytes\", function () {\r\n    pm.expect(pm.response.responseSize).to.be.below(900);\r\n});\r\n\r\n\r\npm.test(\"Verify response data types\", function () {\r\n    const jsonData = pm.response.json();\r\n\r\n    pm.expect(jsonData.firstname).to.be.a(\"string\");\r\n    pm.expect(jsonData.totalprice).to.be.a(\"number\");\r\n    pm.expect(jsonData.depositpaid).to.be.a(\"boolean\");\r\n    pm.expect(jsonData.bookingdates).to.be.an(\"object\");\r\n});\r\n\r\n\r\n\r\n"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// let rawBody = pm.variables.replaceIn(pm.request.body.raw);\r\n// let body = JSON.parse(rawBody);\r\n\r\n// // Replace values\r\n// // body.totalprice = 150;\r\n// body.additionalneeds = \"Lunch\";\r\n\r\n// // Update the request body\r\n// pm.request.body.update(JSON.stringify(body));\r\n\r\n\r\nvar firstname=pm.variables.replaceIn(\"{{$randomFirstName}}\");\r\npm.environment.set(\"firstname\",firstname);\r\n\r\nvar lastname=pm.variables.replaceIn(\"{{$randomLastName}}\");\r\npm.environment.set(\"lastname\",lastname);\r\n\r\nvar totalprice=pm.variables.replaceIn(\"{{$randomInt}}\");\r\npm.environment.set(\"totalprice\",totalprice);\r\n\r\nvar checkin=pm.variables.replaceIn(\"{{$randomDateRecent}}\");\r\npm.environment.set(\"checkin\",checkin);\r\n\r\nvar checkout=pm.variables.replaceIn(\"{{$randomDateRecent}}\");\r\npm.environment.set(\"checkout\",checkout);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "token={{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\t\"firstname\" : \"{{firstname}}\",\r\n\t\"lastname\" : \"{{lastname}}\",\r\n\t\"totalprice\" : {{totalprice}},\r\n\t\"depositpaid\" : \"{{depositpaid}}\",\r\n\t\"bookingdates\" : {\r\n    \t\"checkin\" : \"{{checkin}}\",\r\n    \t\"checkout\" : \"{{checkout}}\"\r\n\t},\r\n\t\"additionalneeds\" : \"{{additionalneeds}}\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/booking/{{bookingid}}?Content-Type=application/json&Accept=application/json&Cookie=token={{token}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "booking",
+            "{{bookingid}}"
+          ],
+          "query": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Accept",
+              "value": "application/json"
+            },
+            {
+              "key": "Cookie",
+              "value": "token={{token}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Partial Update Booking",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Status Code Check\r\npm.test(\"Status code is 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n// Response Time Check (Within 3 seconds)\r\npm.test(\"Response time is under 3000ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(3000);\r\n});\r\n\r\n// Response Size Check (Under 1500 bytes)\r\npm.test(\"Response size is under 900 bytes\", function () {\r\n    pm.expect(pm.response.responseSize).to.be.below(900);\r\n});\r\n\r\n\r\npm.test(\"Verify response data types\", function () {\r\n    const jsonData = pm.response.json();\r\n\r\n    pm.expect(jsonData.firstname).to.be.a(\"string\");\r\n    pm.expect(jsonData.totalprice).to.be.a(\"number\");\r\n    pm.expect(jsonData.depositpaid).to.be.a(\"boolean\");\r\n    pm.expect(jsonData.bookingdates).to.be.an(\"object\");\r\n});\r\n\r\n\r\n\r\n"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var firstname=pm.variables.replaceIn(\"{{$randomFirstName}}\");\r\npm.environment.set(\"firstname\",firstname);\r\n\r\nvar lastname=pm.variables.replaceIn(\"{{$randomLastName}}\");\r\npm.environment.set(\"lastname\",lastname);\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "token={{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\t\"firstname\" : \"{{firstname}}\",\r\n\t\"lastname\" : \"{{lastname}}\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/booking/{{bookingid}}?Content-Type=application/json&Accept=application/json&Cookie=token={{token}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "booking",
+            "{{bookingid}}"
+          ],
+          "query": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Accept",
+              "value": "application/json"
+            },
+            {
+              "key": "Cookie",
+              "value": "token={{token}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Booking",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Status Code Check\r\npm.test(\"Status code is 204 OK\", function () {\r\n    pm.response.to.have.status(204 );\r\n});\r\n\r\n// Response Time Check (Within 3 seconds)\r\npm.test(\"Response time is under 3000ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(3000);\r\n});\r\n\r\n// Response Size Check (Under 1500 bytes)\r\npm.test(\"Response size is under 900 bytes\", function () {\r\n    pm.expect(pm.response.responseSize).to.be.below(900);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "token={{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/booking/{{bookingid}}?Content-Type=application/json&Cookie=token={{token}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "booking",
+            "{{bookingid}}"
+          ],
+          "query": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Cookie",
+              "value": "token={{token}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Booking - GetBookingIds",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Status Code Check\r\npm.test(\"Status code is 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n// Response Time Check (Within 3 seconds)\r\npm.test(\"Response time is under 3000ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(3000);\r\n});\r\n\r\n// Response Size Check (Under 1500 bytes)\r\npm.test(\"Response size is under 900 bytes\", function () {\r\n    pm.expect(pm.response.responseSize).to.be.below(900);\r\n});\r\n\r\n\r\nconst bookingId = 1;  \r\n\r\npm.test(\"Check whether Booking ID exists\", function () {\r\n    const response = pm.response.json();\r\n\r\n    const exists = response.some(function (booking) {\r\n        return booking.bookingid === bookingId;\r\n    });\r\n\r\n    pm.expect(\r\n        exists,\r\n        \"Booking ID \" + bookingId + \" was not found\"\r\n    ).to.be.true;\r\n});\r\n\r\n// const response = pm.response.json();\r\n\r\n// const exists = response.some(function (booking) {\r\n//     return booking.bookingid === bookingId;\r\n// });\r\n\r\n// if (exists) {\r\n//     console.log(\"Booking ID \" + bookingId + \" exists!\");\r\n// } else {\r\n//     console.log(\"Booking ID \" + bookingId + \" does not exist!\");\r\n// }"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/booking",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "booking"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Health Check",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Status Code Check\r\npm.test(\"Status code is 201 OK\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\n// Response Time Check (Within 3 seconds)\r\npm.test(\"Response time is under 1000ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(1000);\r\n});\r\n\r\n// Response Size Check (Under 1500 bytes)\r\npm.test(\"Response size is under 900 bytes\", function () {\r\n    pm.expect(pm.response.responseSize).to.be.below(900);\r\n});\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/ping",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "ping"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
